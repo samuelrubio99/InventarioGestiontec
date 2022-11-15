@@ -21,5 +21,5 @@ admin.site.site_title = "Gestion Inventario"
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    #path('', include('Inventario.urls'))
+    path('', include('Inventario.urls'))
 ]
