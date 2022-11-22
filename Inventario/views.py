@@ -1,9 +1,9 @@
 from django.shortcuts import render
 from django.views.generic import TemplateView
 
-from .models import Acta, Area, Asignacion,Cargo, Celular, CPU, Disco_Duro, Dispositivo_de_Red, Elemento, Estado, Impresora_Scan, Laptop,Licencia, Marca, Monitor, Motherboard, Mouse, Periferico, Persona, Procesador, Ram, Tablet, Teclado, Telefono_fijo,VoIP
+from .models import Acta, Area, Asignacion,Cargo, Celular, CPU, Disco_Duro, Dispositivo_de_Red, Elemento, Estado, Impresora_Scan, Laptop,Licencia, Marca, Monitor, Motherboard, Mouse, Otros_Elementos, Persona, Procesador, Ram, Tablet, Teclado, Extension,VoIP, ModeloRam, Analista_Gestion, Tarjeta_Grafica, Cargador
 from rest_framework import viewsets
-from .serializers import ActaSerializer, AreaSerializer, AsignacionSerializer,CargoSerializer, CelularSerializer, CPUSerializer, Disco_DuroSerializer, Dispositivo_de_RedSerializer, ElementoSerializer, EstadoSerializer, Impresora_ScanSerializer, LaptopSerializer,LicenciaSerializer, MarcaSerializer, MonitorSerializer, MotherboardSerializer, MouseSerializer, PerifericoSerializer, PersonaSerializer, ProcesadorSerializer, RamSerializer, TabletSerializer, TecladoSerializer, Telefono_fijoSerializer,VoIPSerializer 
+from .serializers import ActaSerializer, AreaSerializer, AsignacionSerializer,CargoSerializer, CelularSerializer, CPUSerializer, Disco_DuroSerializer, Dispositivo_de_RedSerializer, ElementoSerializer, EstadoSerializer, Impresora_ScanSerializer, LaptopSerializer,LicenciaSerializer, MarcaSerializer, MonitorSerializer, MotherboardSerializer, MouseSerializer, Otros_ElementosSerializer, PersonaSerializer, ProcesadorSerializer, RamSerializer, TabletSerializer, TecladoSerializer, ExtensionSerializer,VoIPSerializer, ModeloRamSerializer, Analista_GestionSerializer, Tarjeta_GraficaSerializer, CargadorSerializer
 
 from django.views.decorators.csrf import csrf_exempt
 #from rest_framework.decorators import api_view
@@ -38,6 +38,9 @@ class CargoViewSet(viewsets.ModelViewSet):
     queryset = Cargo.objects.all()
     serializer_class = CargoSerializer
 
+class CargadorViewSet(viewsets.ModelViewSet):
+    queryset = Cargador.objects.all()
+    serializer_class = CargadorSerializer
 # Create your views here.
 
 class CelularViewSet(viewsets.ModelViewSet):
@@ -92,13 +95,17 @@ class MouseViewSet(viewsets.ModelViewSet):
     queryset = Mouse.objects.all()
     serializer_class = MouseSerializer
     
-class PerifericoViewSet(viewsets.ModelViewSet):
-    queryset = Periferico.objects.all()
-    serializer_class = PerifericoSerializer
+class Otros_ElementosViewSet(viewsets.ModelViewSet):
+    queryset = Otros_Elementos.objects.all()
+    serializer_class = Otros_ElementosSerializer
     
 class PersonaViewSet(viewsets.ModelViewSet):
     queryset = Persona.objects.all()
     serializer_class = PersonaSerializer
+    
+class Analista_GestionViewSet(viewsets.ModelViewSet):
+    queryset = Analista_Gestion.objects.all()
+    serializer_class = Analista_GestionSerializer
     
 class ProcesadorViewSet(viewsets.ModelViewSet):
     queryset = Procesador.objects.all()
@@ -116,11 +123,19 @@ class TecladoViewSet(viewsets.ModelViewSet):
     queryset = Teclado.objects.all()
     serializer_class = TecladoSerializer
     
-class Telefono_fijoViewSet(viewsets.ModelViewSet):
-    queryset = Telefono_fijo.objects.all()
-    serializer_class = Telefono_fijoSerializer
+class Tarjeta_GraficaViewSet(viewsets.ModelViewSet):
+    queryset = Tarjeta_Grafica.objects.all()
+    serializer_class = Tarjeta_GraficaSerializer
+    
+class ExtensionViewSet(viewsets.ModelViewSet):
+    queryset = Extension.objects.all()
+    serializer_class = ExtensionSerializer
     
 class VoIPViewSet(viewsets.ModelViewSet):
     queryset = VoIP.objects.all()
     serializer_class = VoIPSerializer
     
+    
+class ModeloRamViewSet(viewsets.ModelViewSet):
+    queryset = ModeloRam.objects.all()
+    serializer_class = ModeloRamSerializer

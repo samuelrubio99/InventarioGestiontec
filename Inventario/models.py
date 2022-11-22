@@ -33,17 +33,17 @@ class Acta(models.Model):
        
         
 class Licencia(models.Model):                  
-    modelo = models.CharField(max_length=60, unique=True)
+    Software = models.CharField(max_length=130, null=True)
 
     def __str__(self):
-        return self.modelo
+        return self.Software
     
     class Meta:
         verbose_name_plural = _('Licencia')
         
         
 class Motherboard(models.Model):
-    Serial = models.CharField(max_length=15, unique=True)
+    Serial = models.CharField(max_length=40, unique=True)
     Marca = models.ForeignKey(Marca, on_delete=models.CASCADE)
     Estructura = models.CharField(max_length=200) 
         
@@ -54,9 +54,18 @@ class Motherboard(models.Model):
         verbose_name_plural = _('Motherboard')
         
 
-class Ram(models.Model):
-    Serial = models.CharField(max_length=15, unique=True)
+class ModeloRam(models.Model):
     Modelo = models.CharField(max_length=30)
+
+    def __str__(self):
+        return self.Modelo
+    
+    class Meta:
+        verbose_name_plural = _('ModeloRam')
+        
+class Ram(models.Model):
+    Serial = models.CharField(max_length=40, unique=True)
+    Modelo = models.ForeignKey(ModeloRam, on_delete=models.CASCADE)
     Marca = models.ForeignKey(Marca, on_delete=models.CASCADE)
     Capacidad = models.CharField(max_length=5)
     
@@ -65,6 +74,7 @@ class Ram(models.Model):
     
     class Meta:
         verbose_name_plural = _('Ram')
+
         
 class Disco_Duro(models.Model):
     Serial = models.CharField(max_length=15, unique=True)
@@ -76,7 +86,17 @@ class Disco_Duro(models.Model):
         return self.Serial
     
     class Meta:
-        verbose_name_plural = _('Disco_Duro')        
+        verbose_name_plural = _('Disco_Duro') 
+        
+class Tarjeta_Grafica(models.Model):
+    Modelo = models.CharField(max_length=40, unique=True)
+    Tipo_de_Interfaz = models.CharField(max_length=40)
+    
+    def __str__(self):
+        return self.Modelo  
+    
+    class Meta:
+        verbose_name_plural = _('Tarjeta_Grafica')       
         
     
 class Procesador(models.Model):
@@ -130,34 +150,34 @@ class Teclado(models.Model):
         
         
       
-class Telefono_fijo(models.Model):
+class Extension(models.Model):
     Serial = models.CharField(max_length=15, unique=True)
-    Modelo = models.CharField(max_length=30)
+    Extension = models.CharField(max_length=30, null=True)
     Direccion_mac = models.CharField(max_length=30)
     Marca = models.ForeignKey(Marca, on_delete=models.CASCADE)
     Estado = models.ForeignKey(Estado, on_delete=models.CASCADE)
     Observacion = models.TextField(max_length=200)
     
     def __str__(self):
-        return self.Serial    
+        return self.Extension
     
     class Meta:
         verbose_name_plural = _('Telefono_fijo')
         
 
-class Periferico(models.Model):
+class Otros_Elementos(models.Model):
     Serial = models.CharField(max_length=15, unique=True)
-    Modelo = models.CharField(max_length=30)
+    Nombre = models.CharField(max_length=30)
     Marca = models.ForeignKey(Marca, on_delete=models.CASCADE)
     Estado = models.ForeignKey(Estado, on_delete=models.CASCADE)
     Cantidad = models.IntegerField(blank=True, null=True)
     Observacion = models.TextField(max_length=200)
     
     def __str__(self):
-        return self.Serial    
+        return self.Nombre   
     
     class Meta:
-        verbose_name_plural = _('Periferico')
+        verbose_name_plural = _('Otros_Elementos')
 
 class Elemento(models.Model):
     Serial = models.CharField(max_length=15, unique=True)
@@ -232,7 +252,16 @@ class VoIP(models.Model):
     class Meta:
         verbose_name_plural = _('VoIP')  
         
-
+class Cargador(models.Model):
+    Modelo = models.CharField(max_length=30)
+    Marca = models.ForeignKey(Marca, on_delete=models.CASCADE)
+    Estado = models.ForeignKey(Estado, on_delete=models.CASCADE)
+    
+    def __str__(self):
+        return self.Modelo
+    
+    class Meta:
+        verbose_name_plural = _('Cargador')
 
 # Create your models here.
 
@@ -288,12 +317,26 @@ class Persona(models.Model):
     Area = models.ForeignKey(Area, on_delete=models.CASCADE)
     
     def __str__(self):
-        return self.Nombres, self.Numero_Celular
+        return self.Nombres
     
     class Meta:
-        verbose_name_plural = _('Persona')       
+        verbose_name_plural = _('Persona')
+        
+        
+class Analista_Gestion(models.Model):
+    Nombres = models.CharField(max_length=200)
+    Apellidos = models.CharField(max_length=200)
+    Correo = models.EmailField(max_length=100, unique=True)
+    Numero_Celular = models.CharField(max_length=70,default="")
+
+    def __str__(self):
+        return self.Nombres
+    
+    class Meta:
+        verbose_name_plural = _('Analista_Gestion')      
 
 class CPU(models.Model):
+    Nombre_Equipo = models.CharField(max_length=80, unique=True, null=True)
     Torre = models.CharField(max_length=30)
     Extra = models.CharField(max_length=80)
     MAC = models.CharField(max_length=30, unique=True)
@@ -307,11 +350,15 @@ class CPU(models.Model):
     Licencia = models.ForeignKey(Licencia, on_delete=models.CASCADE)
     Estado = models.ForeignKey(Estado, on_delete=models.CASCADE)
     Acta = models.ForeignKey(Acta, on_delete=models.CASCADE)
-
+    
+    def __str__(self):
+        return self.Nombre_Equipo
+    
     class Meta:
         verbose_name_plural = _('CPU')
                 
 class Laptop(models.Model):
+    Nombre_Equipo = models.CharField(max_length=80,unique=True, null=True )
     Serial = models.CharField(max_length=30, unique=True)
     Modelo = models.CharField(max_length=80)
     Marca = models.ForeignKey(Marca, on_delete=models.CASCADE)
@@ -321,7 +368,7 @@ class Laptop(models.Model):
     Licencia = models.ForeignKey(Licencia, on_delete=models.CASCADE)
     LAN_MAC = models.CharField(max_length=30, unique=True)
     WLAN_MAC = models.CharField(max_length=30, unique=True)
-    Backup = models.DateField(null=True, blank=True)
+    Ultimo_Backup = models.DateField(null=True, blank=True)
     Cargador = models.CharField(max_length=80)
     Bateria = models.CharField(max_length=80)
     Estado = models.ForeignKey(Estado, on_delete=models.CASCADE)
@@ -329,7 +376,7 @@ class Laptop(models.Model):
     Observacion = models.TextField(max_length=200)
 
     def __str__(self):
-        return self.Serial
+        return self.Nombre_Equipo
     
     class Meta:
         verbose_name_plural = _('Laptop')
@@ -341,9 +388,11 @@ class Asignacion(models.Model):
     Teclado = models.ForeignKey(Teclado, on_delete=models.CASCADE)
     Mouse = models.ForeignKey(Mouse, on_delete=models.CASCADE)
     Celular = models.ForeignKey(Celular, on_delete=models.CASCADE)
-    Telefono_fijo = models.ForeignKey(Telefono_fijo, on_delete=models.CASCADE)
-    Periferico = models.ForeignKey(Periferico, on_delete=models.CASCADE)
-    Acta = models.ForeignKey(Acta, on_delete=models.CASCADE)
+    Extencion = models.ForeignKey(Extension, on_delete=models.CASCADE)
+    Otro_Elemento = models.ForeignKey(Otros_Elementos, on_delete=models.CASCADE)
+    Fecha_Inicio = models.DateField(null=True, blank=True) 
+    Fecha_Final = models.DateField(null=True, blank=True)
+    Analista_a_Cargo = models.ForeignKey(Analista_Gestion, on_delete=models.CASCADE, null=True)
     Observacion = models.TextField(max_length=200)
     
     class Meta():
